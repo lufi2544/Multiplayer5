@@ -18,6 +18,7 @@ struct FMySparseClassData
 
 	{}
 
+	//The Platform Speed
 	UPROPERTY(EditDefaultsOnly, meta = (GetByRef)  , meta =(DisplayName = "Speed") ,meta = (ClampMin = -3) , meta = (ClampMax = 3) , Category = "PlatformBase")
 		float fSpeed;
 
@@ -33,13 +34,20 @@ class MULTIPLAYER5_API AMovingPlatform : public AStaticMeshActor
 
 public:
 
-	AMovingPlatform();
-	virtual void Tick(float DeltaTime) override;
 
 	//GETTERS
 	UFUNCTION(BlueprintPure , Category = "PlatformBase")
 	float GetPlatformSpeed();
 
+	//FUNCTIONS
+
+	//DELEGATES
+
+
+	AMovingPlatform();
+
+	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
 
 
 #if WITH_EDITOR
@@ -61,6 +69,7 @@ public:
 
 private:
 
+	//The Platform Speed
 	UPROPERTY()
 		float fSpeed_DEPRECATED;
 

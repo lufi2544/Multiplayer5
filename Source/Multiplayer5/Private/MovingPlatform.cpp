@@ -34,6 +34,21 @@ void AMovingPlatform::Tick(float DeltaTime)
 	}
 }
 
+void AMovingPlatform::BeginPlay()
+{
+
+	Super::BeginPlay();
+
+	if (HasAuthority())
+	{
+		SetReplicates(true);
+		SetReplicateMovement(true);
+	}
+
+
+
+}
+
 //GETTERS
 
 float AMovingPlatform::GetPlatformSpeed()
