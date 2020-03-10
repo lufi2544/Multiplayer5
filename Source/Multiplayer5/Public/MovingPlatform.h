@@ -39,19 +39,14 @@ class MULTIPLAYER5_API AMovingPlatform : public AStaticMeshActor
 public:
 
 	//PROPERTIES
-	UPROPERTY(EditAnywhere , BlueprintReadWrite,  Category = "PlatformBase")
-		ATargetPointBase* TargetPoint1;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "PlatformBase")
-		ATargetPointBase* TargetPoint2;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
-		ATargetPointBase* TargetPoint3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite , Category = "PlatformBase")
+		TArray<ATargetPointBase*>TargetsToReach;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
 		bool RandomMovementToTargets;
-
-
 
 
 
@@ -66,11 +61,11 @@ public:
 
 	//FUNCTIONS
 
-	void PlatformStartMovement(ATargetPointBase* TargetPointA, ATargetPointBase* TargetPointB);
 
-	bool PlatformstartRandomMovement(ATargetPointBase* TargetA, ATargetPointBase* TargetB, ATargetPointBase* TargetC, bool bHasRandomMovement);
 
 	bool PlatformGo(ATargetPointBase* TargetPoint);
+
+	bool PlatformMoveToTatgets(TArray<ATargetPointBase*> Targets, bool bHasRandomMovement);
 
 
 
@@ -81,14 +76,10 @@ public:
 
 	//VARIABLES
 
-	bool bHasReachedA = false;
-
-	bool bHasReachedB = false;
-
 
 	bool bIsReaching = false;
 
-	int32 iRandomTargetPointNumber;
+	int32 ArrayCounter = 0;
 
 	ATargetPointBase* PlatformReaching;
 	ATargetPointBase* LastPlatformReached;

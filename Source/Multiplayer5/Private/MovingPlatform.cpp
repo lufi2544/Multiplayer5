@@ -26,22 +26,9 @@ void AMovingPlatform::Tick(float DeltaTime)
 	if (HasAuthority())
 	{
 
-		if (RandomMovementToTargets) 
-		{
 		
-			PlatformstartRandomMovement(TargetPoint1, TargetPoint2, TargetPoint3, RandomMovementToTargets);
+			PlatformMoveToTatgets(TargetsToReach, RandomMovementToTargets);
 		
-		}
-		else
-		{
-
-			PlatformStartMovement(TargetPoint1, TargetPoint2);
-		}
-
-		
-
-		
-
 	}
 }
 
@@ -50,12 +37,7 @@ void AMovingPlatform::BeginPlay()
 
 	Super::BeginPlay();
 
-	if (!ensure(TargetPoint1) || !ensure(TargetPoint2)) 
-	{
-	
-		return;
-	
-	}
+
 
 	if (HasAuthority())
 	{
@@ -89,113 +71,6 @@ float AMovingPlatform::GetPlatformSpeed()
 
 
 
-
-
-
-bool AMovingPlatform::PlatformstartRandomMovement(ATargetPointBase* TargetPointA, ATargetPointBase* TargetPointB, ATargetPointBase* TargetPointC, bool bHasRandomMovement)
-{
-
-	if (!ensure(TargetPointA) || !ensure(TargetPointB) || !ensure(TargetPointC))
-	{
-		return false;
-	}
-	bool bSuccess = false;
-
-	if (bHasRandomMovement)
-	{
-		if (!bIsReaching) 
-		{
-
-			iRandomTargetPointNumber = FMath::RandRange(1, 3);
-
-			switch (iRandomTargetPointNumber)
-			{
-			case 1:
-				PlatformReaching = TargetPointA;
-				break;
-			case 2:
-				PlatformReaching = TargetPointB;
-				break;
-			case 3:
-				PlatformReaching = TargetPointC;
-				break;
-			}
-
-			bIsReaching = true;
-
-		}
-		else {
-
-			if (PlatformReaching != LastPlatformReached)
-			{
-
-				PlatformGo(PlatformReaching);
-
-
-				if ( PlatformGo(PlatformReaching) )
-				{
-
-					LastPlatformReached = PlatformReaching;
-					bSuccess = true;
-					bIsReaching = false;
-
-				}
-
-			}
-			else
-			{
-				bSuccess = false;
-				bIsReaching = false;
-			}
-
-			
-		}
-	}
-	return bSuccess;
-}
-
-void AMovingPlatform::PlatformStartMovement(ATargetPointBase* TargetPointA, ATargetPointBase* TargetPointB)
-{
-
-	if (!ensure(TargetPointA) || !ensure(TargetPointB)) { return; }
-
-
-
-	if (!bHasReachedA)
-	{
-		PlatformGo(TargetPointA);
-
-		if (PlatformGo(TargetPointA))
-		{
-
-			bHasReachedA = true;
-
-			bHasReachedB = false;
-
-		}
-
-	}
-	else if (!bHasReachedB)
-	{
-		PlatformGo(TargetPointB);
-
-		if (PlatformGo(TargetPointB))
-		{
-
-			bHasReachedB = true;
-
-			bHasReachedA = false;
-
-		}
-
-
-	}
-
-
-
-	
-}
-
 bool AMovingPlatform::PlatformGo(ATargetPointBase* TargetPointA)
 {
 	bool bHasReached = false;
@@ -225,6 +100,108 @@ bool AMovingPlatform::PlatformGo(ATargetPointBase* TargetPointA)
 }
 
 
+
+
+bool AMovingPlatform::PlatformMoveToTatgets(TArray<ATargetPointBase*> Targets, bool bHasRandomMovement)
+{
+	bool bSuccess = false;
+
+
+	if (Targets.Num() > 0) 
+	{
+	
+		if (!bHasRandomMovement) 
+		{
+		
+			if (!bIsReaching) 
+			{
+				if (!ensure(Targets[ArrayCounter])) { return false; }
+
+				PlatformReaching = Targets[ArrayCounter];
+
+				bIsReaching = true;
+			
+			}
+			else
+			{
+				PlatformGo(PlatformReaching);
+
+				if (PlatformGo(PlatformReaching))
+				{
+					bSuccess = true;
+					bIsReaching = false;
+					ArrayCounter++;
+
+					if (ArrayCounter == Targets.Num()) 
+					{
+					
+						ArrayCounter = 0;
+
+					}
+
+
+				}
+
+				
+			}
+		
+		
+		}
+		else
+		{
+
+			if (!bIsReaching) 
+			{
+
+				ArrayCounter = FMath::RandRange(0, Targets.Num()-1);
+
+				if (!ensure(Targets[ArrayCounter])) { return false; }
+				
+				PlatformReaching = Targets[ArrayCounter];
+				
+				bIsReaching = true;
+			}
+			else
+			{
+
+				if (PlatformReaching != LastPlatformReached) 
+				{
+					PlatformGo(PlatformReaching);
+
+					if (PlatformGo(PlatformReaching)) 
+					{
+						LastPlatformReached = PlatformReaching;
+						bIsReaching = false;
+						bSuccess = true;
+
+					}
+				
+				}
+				else 
+				{
+					bIsReaching = false;
+					bSuccess = false;
+				
+				}
+
+
+			}
+
+
+
+		}
+		
+
+	}
+	else
+	{
+
+		bSuccess = false;
+	}
+
+
+	return bSuccess;
+}
 
 
 
