@@ -41,13 +41,16 @@ public:
 	//PROPERTIES
 
 
-
+	//Targets that the platform will move between
 	UPROPERTY(EditAnywhere, BlueprintReadWrite , Category = "PlatformBase")
 		TArray<ATargetPointBase*>TargetsToReach;
 
+	// If true The Platform wll move between the given Targets with a random movement
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
 		bool RandomMovementToTargets;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
+		bool CanMove;
 
 
 

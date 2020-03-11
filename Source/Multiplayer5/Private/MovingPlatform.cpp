@@ -25,10 +25,11 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 	if (HasAuthority())
 	{
+		if (CanMove) 
+		{
 
-		
 			PlatformMoveToTatgets(TargetsToReach, RandomMovementToTargets);
-		
+		}
 	}
 }
 
