@@ -36,7 +36,7 @@ void AMovingPlatform::Tick(float DeltaTime)
 			}
 			else
 			{
-				PlatformMoveToTatgets(TargetsToReachOnControlPush, RandomMovementToTargets);
+				PlatformMoveToTatgets(TargetsToReachOnButonPush, RandomMovementToTargets);
 			}
 		}
 	}

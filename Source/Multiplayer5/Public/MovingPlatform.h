@@ -57,7 +57,7 @@ public:
 
 	//Targets that the platform will move between when we push a button
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
-		TArray<ATargetPointBase*>TargetsToReachOnControlPush;
+		TArray<ATargetPointBase*>TargetsToReachOnButonPush;
 
 	UPROPERTY(EditAnywhere , Category = "PlatformBase")
 		bool IsButtonActive;
@@ -73,7 +73,7 @@ public:
 
 	//FUNCTIONS
 
-
+	/*Change the targets to reach by the platform based on a button being pushed*/
 	UFUNCTION(BlueprintCallable , category ="PlatformBase")
 	bool OnControlButtonPushed(bool bIsButtonactive);
 
