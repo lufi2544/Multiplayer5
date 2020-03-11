@@ -6,6 +6,10 @@
 #include "Engine/StaticMeshActor.h"
 #include "MovingPlatform.generated.h"
 
+//FWD Delcarations
+
+class ATargetPointBase;
+
 USTRUCT(BlueprintType)
 struct FMySparseClassData
 {
@@ -13,13 +17,14 @@ struct FMySparseClassData
 
 
 	FMySparseClassData()
-		:fSpeed(1.f)
+		:fName("Name_None")
 
 
 	{}
 
-	UPROPERTY(EditDefaultsOnly, meta = (GetByRef)  , meta =(DisplayName = "Speed") ,meta = (ClampMin = -3) , meta = (ClampMax = 3) , Category = "PlatformBase")
-		float fSpeed;
+	//The Platform Speed
+	UPROPERTY(EditDefaultsOnly, meta = (GetByRef)  , meta =(DisplayName = "PlatformName")  , Category = "PlatformBase")
+		FName fName;
 
 };
 
@@ -33,12 +38,83 @@ class MULTIPLAYER5_API AMovingPlatform : public AStaticMeshActor
 
 public:
 
-	AMovingPlatform();
-	virtual void Tick(float DeltaTime) override;
+	//PROPERTIES
+
+
+	//Targets that the platform will move between
+	UPROPERTY(EditAnywhere, BlueprintReadWrite , Category = "PlatformBase")
+		TArray<ATargetPointBase*>TargetsToReach;
+
+	// If true The Platform will move between the given Targets with a random movement
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
+		bool RandomMovementToTargets;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
+		bool CanMove;
+
+	UPROPERTY(EditAnywhere , Category = "PlatformBase" , meta = (ClampMin = -3.f) ,  meta = (ClampMax = 3.f) , meta = (DisplayName = "Speed"))
+	float fSpeed = 1.f;
+
+	//Targets that the platform will move between when we push a button
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
+		TArray<ATargetPointBase*>TargetsToReachOnControlPush;
+
+	UPROPERTY(EditAnywhere , Category = "PlatformBase")
+		bool IsButtonActive;
+
 
 	//GETTERS
 	UFUNCTION(BlueprintPure , Category = "PlatformBase")
-	float GetPlatformSpeed();
+	FName GetPlatformName();
+
+
+
+
+
+	//FUNCTIONS
+
+
+	UFUNCTION(BlueprintCallable , category ="PlatformBase")
+	bool OnControlButtonPushed(bool bIsButtonactive);
+
+
+
+	bool PlatformGo(ATargetPointBase* TargetPoint);
+
+	bool PlatformMoveToTatgets(TArray<ATargetPointBase*> Targets, bool bHasRandomMovement);
+
+
+
+
+
+
+
+
+	//VARIABLES
+
+
+	bool bIsReaching = false;
+
+	int32 ArrayCounter = 0;
+
+	ATargetPointBase* PlatformReaching;
+	ATargetPointBase* LastPlatformReached;
+	
+
+
+	//DELEGATES
+
+
+
+
+
+
+	AMovingPlatform();
+
+	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
+
+
 
 
 
@@ -51,9 +127,6 @@ public:
 	virtual void MoveDataToSparseClassDataStruct() const override;
 
 
-
-
-	
 #endif
 	
 
@@ -61,8 +134,9 @@ public:
 
 private:
 
+	//The Platform Speed
 	UPROPERTY()
-		float fSpeed_DEPRECATED;
+		FName fName_DEPRECATED;
 
 #endif
 
