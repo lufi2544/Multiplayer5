@@ -17,14 +17,14 @@ struct FMySparseClassData
 
 
 	FMySparseClassData()
-		:fSpeed(1.f)
+		:fName("Name_None")
 
 
 	{}
 
 	//The Platform Speed
-	UPROPERTY(EditDefaultsOnly, meta = (GetByRef)  , meta =(DisplayName = "Speed") ,meta = (ClampMin = -3) , meta = (ClampMax = 3) , Category = "PlatformBase")
-		float fSpeed;
+	UPROPERTY(EditDefaultsOnly, meta = (GetByRef)  , meta =(DisplayName = "PlatformName")  , Category = "PlatformBase")
+		FName fName;
 
 };
 
@@ -45,24 +45,37 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite , Category = "PlatformBase")
 		TArray<ATargetPointBase*>TargetsToReach;
 
-	// If true The Platform wll move between the given Targets with a random movement
+	// If true The Platform will move between the given Targets with a random movement
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
 		bool RandomMovementToTargets;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
 		bool CanMove;
 
+	UPROPERTY(EditAnywhere , Category = "PlatformBase" , meta = (ClampMin = -3.f) ,  meta = (ClampMax = 3.f) , meta = (DisplayName = "Speed"))
+	float fSpeed = 1.f;
+
+	//Targets that the platform will move between when we push a button
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
+		TArray<ATargetPointBase*>TargetsToReachOnControlPush;
+
+	UPROPERTY(EditAnywhere , Category = "PlatformBase")
+		bool IsButtonActive;
 
 
 	//GETTERS
 	UFUNCTION(BlueprintPure , Category = "PlatformBase")
-	float GetPlatformSpeed();
+	FName GetPlatformName();
 
 
 
 
 
 	//FUNCTIONS
+
+
+	UFUNCTION(BlueprintCallable , category ="PlatformBase")
+	bool OnControlButtonPushed(bool bIsButtonactive);
 
 
 
@@ -123,7 +136,7 @@ private:
 
 	//The Platform Speed
 	UPROPERTY()
-		float fSpeed_DEPRECATED;
+		FName fName_DEPRECATED;
 
 #endif
 

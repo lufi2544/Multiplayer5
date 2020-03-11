@@ -14,6 +14,8 @@ AMovingPlatform::AMovingPlatform()
 
 	GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);
 
+	fSpeed = 1.f;
+
 	
 
 }
@@ -27,8 +29,15 @@ void AMovingPlatform::Tick(float DeltaTime)
 	{
 		if (CanMove) 
 		{
+			if (!IsButtonActive) 
+			{
 
-			PlatformMoveToTatgets(TargetsToReach, RandomMovementToTargets);
+				PlatformMoveToTatgets(TargetsToReach, RandomMovementToTargets);
+			}
+			else
+			{
+				PlatformMoveToTatgets(TargetsToReachOnControlPush, RandomMovementToTargets);
+			}
 		}
 	}
 }
@@ -56,9 +65,9 @@ void AMovingPlatform::BeginPlay()
 
 
 
-float AMovingPlatform::GetPlatformSpeed()
+FName AMovingPlatform::GetPlatformName()
 {
-	return GetfSpeed();
+	return GetfName();
 }
 
 
@@ -67,6 +76,14 @@ float AMovingPlatform::GetPlatformSpeed()
 
 
 
+
+bool AMovingPlatform::OnControlButtonPushed(bool bIsButtonActive)
+{
+
+	IsButtonActive = bIsButtonActive;
+
+	return IsButtonActive;
+}
 
 //FUNCTIONS
 
@@ -87,7 +104,7 @@ bool AMovingPlatform::PlatformGo(ATargetPointBase* TargetPointA)
 
 
 
-	SetActorLocation(vCurrentActorLocation + nvDistanceToTargetPointA * GetfSpeed());
+	SetActorLocation(vCurrentActorLocation + nvDistanceToTargetPointA * fSpeed);
 
 	if (GetActorLocation().Equals(vTarget1Location, 2.f))
 	{
@@ -236,7 +253,7 @@ bool AMovingPlatform::PlatformMoveToTatgets(TArray<ATargetPointBase*> Targets, b
 	FMySparseClassData* SparseClass = GetMySparseClassData();
 
 	// Modify these lines to include all Sparse Class Data properties.
-	SparseClass->fSpeed = fSpeed_DEPRECATED;
+	SparseClass->fName = fName_DEPRECATED;
 	
 
 #endif
