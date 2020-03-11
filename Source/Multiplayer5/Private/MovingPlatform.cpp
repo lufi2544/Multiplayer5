@@ -104,7 +104,7 @@ bool AMovingPlatform::PlatformGo(ATargetPointBase* TargetPointA)
 
 
 
-	SetActorLocation(vCurrentActorLocation + nvDistanceToTargetPointA * fSpeed);
+	SetActorLocation(vCurrentActorLocation + nvDistanceToTargetPointA * fSpeed );
 
 	if (GetActorLocation().Equals(vTarget1Location, 2.f))
 	{
@@ -113,6 +113,7 @@ bool AMovingPlatform::PlatformGo(ATargetPointBase* TargetPointA)
 
 	}
 
+	UE_LOG(LogTemp, Error, TEXT("%i"),bHasReached);
 
 	return bHasReached;
 }

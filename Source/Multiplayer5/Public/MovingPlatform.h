@@ -52,7 +52,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformBase")
 		bool CanMove;
 
-	UPROPERTY(EditAnywhere , Category = "PlatformBase" , meta = (ClampMin = -3.f) ,  meta = (ClampMax = 3.f) , meta = (DisplayName = "Speed"))
+	UPROPERTY(EditAnywhere , Category = "PlatformBase" , meta = (ClampMin = -2.f) ,  meta = (ClampMax = 2.f) , meta = (DisplayName = "Speed"))
 	float fSpeed = 1.f;
 
 	//Targets that the platform will move between when we push a button
